@@ -131,8 +131,15 @@ public class PrototypeSerializableTest {
             ois = new ObjectInputStream(bis);
 
             /**
-             * TODO
-             * 序列化不可以复制不同class对象，会抛异常的（java.lang.ClassCastException）
+             * TODO 注意事项
+             * 1、序列化不可以复制不同class对象，会抛异常的（java.lang.ClassCastException）
+             * 2、序列化serialVersionUID与反列化serialVersionUID不同，会抛异常
+             * 3、transient修饰的成员变量不会被序列化；static修饰的静态成员变更不会被序列化
+             * 4、针对第3点绕过transient修饰不序列化使之序列化，序列化类写方法，如下：
+             * private void writeObject(ObjectOutputStream objectOutputStream) {...}
+             * private void readObject(ObjectInputStream objectInputStream) {...}
+             * 5、父类也要实现Serializable接口否则会抛异常；父类已实现Serializable接口，子类可以不实现Serializable接口
+             * 6、实现Cloneable接口克隆为浅克隆，浅克隆不会克隆复杂对象（或自定义对象）而是引用原来对象地址
              */
             myNatatorium = (MyNatatorium) ois.readObject();   //克隆好的对象！
         } catch (Exception e) {
