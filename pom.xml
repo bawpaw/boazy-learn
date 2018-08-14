@@ -17,6 +17,9 @@
 
     <modules>
         <module>boazy-learn-DesignPattern</module>
+        <module>boazy-learn-multithreading</module>
+        <module>boazy-learn-rmi</module>
+        <module>boazy-learn-api</module>
     </modules>
 
     <dependencyManagement>
