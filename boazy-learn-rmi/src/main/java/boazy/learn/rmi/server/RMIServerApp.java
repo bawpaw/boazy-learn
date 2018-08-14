@@ -15,7 +15,7 @@ import java.rmi.registry.LocateRegistry;
  * @company boazy
  * @date 2018/8/14
  */
-public class ServerApp {
+public class RMIServerApp {
 
     public static void main(String[] args) throws RemoteException, MalformedURLException {
         System.out.println("server start...");

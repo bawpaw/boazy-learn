@@ -12,7 +12,7 @@ import java.rmi.RemoteException;
  * @company boazy
  * @date 2018/8/14
  */
-public class ClientApp {
+public class RMIClientApp {
 
     public static void main(String[] args) throws RemoteException, NotBoundException, MalformedURLException {
         System.out.println("rmi invoke start...");
