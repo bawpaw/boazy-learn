@@ -1,4 +1,4 @@
-## Spring Boot 2.0.x + jersey2 Swagger Sample APP
+## Spring Boot 2.0.x + jersey2 Swagger api-doc APP
 
 ### Swagger version
 * swagger 2.0.3
