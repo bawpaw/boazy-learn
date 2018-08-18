@@ -20,6 +20,7 @@
         <module>boazy-learn-multithreading</module>
         <module>boazy-learn-rmi</module>
         <module>boazy-learn-api</module>
+        <module>boazy-learn-swagger</module>
     </modules>
 
     <dependencyManagement>
