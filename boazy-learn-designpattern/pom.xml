@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>boazy.learn</groupId>
-    <artifactId>boazy-learn-DesignPattern</artifactId>
+    <artifactId>boazy-learn-designpattern</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>boazy-learn-DesignPattern</name>
+    <name>boazy-learn-designpattern</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
