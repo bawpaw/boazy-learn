@@ -23,7 +23,7 @@ public class HungrySingleton {
     }
 
     // 3、提供静态获取实例方法
-    public static HungrySingleton getInstance() {
+    public static final HungrySingleton getInstance() {
         return HUNGRY;
     }
 

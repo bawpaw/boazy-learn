@@ -22,7 +22,7 @@ public class SluggardSimpleSingleton {
 
     // 3、提供静态获取实例方法
     // synchronized保证线程安全，保证一个实例
-    public static synchronized SluggardSimpleSingleton getInstance() {
+    public static final synchronized SluggardSimpleSingleton getInstance() {
         sluggard = new SluggardSimpleSingleton();
         return sluggard;
     }

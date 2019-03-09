@@ -28,7 +28,7 @@ public class SluggardInnerClassSingleton {
     }
 
     // 3、提供静态获取实例方法
-    public static SluggardInnerClassSingleton getInstance() {
+    public static final SluggardInnerClassSingleton getInstance() {
         return StaticInnerClassHolder.SLUGGARD;
     }
 

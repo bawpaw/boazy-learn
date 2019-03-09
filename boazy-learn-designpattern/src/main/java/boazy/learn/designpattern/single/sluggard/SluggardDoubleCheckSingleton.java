@@ -26,7 +26,7 @@ public class SluggardDoubleCheckSingleton {
     }
 
     // 3、提供静态获取实例方法
-    public static SluggardDoubleCheckSingleton getInstance() {
+    public static final SluggardDoubleCheckSingleton getInstance() {
         // 双重检查（第一重检查）
         if (null != sluggard) {
             return sluggard;
