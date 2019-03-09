@@ -21,7 +21,7 @@ public class SingleTest {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println(System.currentTimeMillis() + ": " + HungerSingle.getInstance());
+                    System.out.println(System.currentTimeMillis() + ": " + HungrySingle.getInstance());
                     latch.countDown();
                 }
             }).start();
