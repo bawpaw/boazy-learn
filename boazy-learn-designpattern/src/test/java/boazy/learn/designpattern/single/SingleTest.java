@@ -1,5 +1,9 @@
 package boazy.learn.designpattern.single;
 
+import boazy.learn.designpattern.single.hungry.HungrySingleton;
+import boazy.learn.designpattern.single.registered.EnumSingleton;
+import boazy.learn.designpattern.single.sluggard.SluggardInnerClassSingleton;
+import boazy.learn.designpattern.single.sluggard.SluggardSimpleSingleton;
 import org.junit.Test;
 
 import java.util.concurrent.CountDownLatch;
@@ -21,7 +25,7 @@ public class SingleTest {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println(System.currentTimeMillis() + ": " + HungrySingle.getInstance());
+                    System.out.println(System.currentTimeMillis() + ": " + HungrySingleton.getInstance());
                     latch.countDown();
                 }
             }).start();
@@ -45,7 +49,7 @@ public class SingleTest {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println(System.currentTimeMillis() + ": " + SluggardSingle.getInstance());
+                    System.out.println(System.currentTimeMillis() + ": " + SluggardSimpleSingleton.getInstance());
                     latch.countDown();
                 }
             }).start();
@@ -69,7 +73,7 @@ public class SingleTest {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println(System.currentTimeMillis() + ": " + StaticInnerClassSingle.getInsatance());
+                    System.out.println(System.currentTimeMillis() + ": " + SluggardInnerClassSingleton.getInstance());
                     latch.countDown();
                 }
             }).start();
@@ -93,7 +97,7 @@ public class SingleTest {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println(System.currentTimeMillis() + ": " + EnumSingle.INSTANCE.hashCode());
+                    System.out.println(System.currentTimeMillis() + ": " + EnumSingleton.INSTANCE.getData());
                     latch.countDown();
                 }
             }).start();
