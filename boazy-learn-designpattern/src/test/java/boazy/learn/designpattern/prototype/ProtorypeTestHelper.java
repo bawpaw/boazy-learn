@@ -5,7 +5,6 @@ import org.junit.Assert;
 
 /**
  * @author boazy
- * @company boazy
  * @date 2018/8/5
  */
 public class ProtorypeTestHelper {

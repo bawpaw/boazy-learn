@@ -1,16 +1,16 @@
 package boazy.learn.designpattern.prototype;
 
-import com.alibaba.fastjson.JSONObject;
-import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author boazy
- * @company boazy
  * @date 2018/8/5
  */
 public class PrototypeSerializableTest {
@@ -31,8 +31,8 @@ public class PrototypeSerializableTest {
         myTV.setTvCpu(tvCpu = new TVCpu());
         tvCpu.setName("冲天CPU");
         tvCpu.setKernelNumber(8);
-        List<TVMemory> tvMemories;
-        myTV.setTvMemories(tvMemories = new ArrayList<TVMemory>());
+        List<TVMemory> tvMemories = new ArrayList<>();
+        myTV.setTvMemories(tvMemories);
         TVMemory tvMemory1;
         tvMemories.add(tvMemory1 = new TVMemory());
         tvMemory1.setName("冲天Memory1");
@@ -60,25 +60,25 @@ public class PrototypeSerializableTest {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         } finally {
-            if(null != bos) {
+            if (null != bos) {
                 try {
                     bos.close();
                 } catch (Throwable t) {
                 }
             }
-            if(null != oos) {
+            if (null != oos) {
                 try {
                     oos.close();
                 } catch (Throwable t) {
                 }
             }
-            if(null != bis) {
+            if (null != bis) {
                 try {
                     bis.close();
                 } catch (Throwable t) {
                 }
             }
-            if(null != ois) {
+            if (null != ois) {
                 try {
                     ois.close();
                 } catch (Throwable t) {
@@ -105,8 +105,8 @@ public class PrototypeSerializableTest {
         myTV.setTvCpu(tvCpu = new TVCpu());
         tvCpu.setName("冲天CPU");
         tvCpu.setKernelNumber(8);
-        List<TVMemory> tvMemories;
-        myTV.setTvMemories(tvMemories = new ArrayList<TVMemory>());
+        List<TVMemory> tvMemories = new ArrayList<>();
+        myTV.setTvMemories(tvMemories);
         TVMemory tvMemory1;
         tvMemories.add(tvMemory1 = new TVMemory());
         tvMemory1.setName("冲天Memory1");
@@ -146,25 +146,25 @@ public class PrototypeSerializableTest {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);
         } finally {
-            if(null != bos) {
+            if (null != bos) {
                 try {
                     bos.close();
                 } catch (Throwable t) {
                 }
             }
-            if(null != oos) {
+            if (null != oos) {
                 try {
                     oos.close();
                 } catch (Throwable t) {
                 }
             }
-            if(null != bis) {
+            if (null != bis) {
                 try {
                     bis.close();
                 } catch (Throwable t) {
                 }
             }
-            if(null != ois) {
+            if (null != ois) {
                 try {
                     ois.close();
                 } catch (Throwable t) {

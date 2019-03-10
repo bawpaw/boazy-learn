@@ -4,11 +4,10 @@ import java.io.Serializable;
 
 /**
  * @author boazy
- * @company boazy
  * @date 2018/8/5
  */
 public class MyNatatorium implements Serializable {
-        
+
     private String name;
 
     private String position;

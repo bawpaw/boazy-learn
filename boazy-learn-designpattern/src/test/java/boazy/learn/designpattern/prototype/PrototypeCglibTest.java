@@ -1,10 +1,6 @@
 package boazy.learn.designpattern.prototype;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import net.sf.cglib.beans.BeanCopier;
-import net.sf.cglib.core.Converter;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,7 +8,6 @@ import java.util.List;
 
 /**
  * @author boazy
- * @company boazy
  * @date 2018/8/5
  */
 public class PrototypeCglibTest {
@@ -33,8 +28,8 @@ public class PrototypeCglibTest {
         myTV.setTvCpu(tvCpu = new TVCpu());
         tvCpu.setName("冲天CPU2");
         tvCpu.setKernelNumber(8);
-        List<TVMemory> tvMemories;
-        myTV.setTvMemories(tvMemories = new ArrayList<TVMemory>());
+        List<TVMemory> tvMemories = new ArrayList<>();
+        myTV.setTvMemories(tvMemories);
         TVMemory tvMemory1;
         tvMemories.add(tvMemory1 = new TVMemory());
         tvMemory1.setName("冲天Memory12");
@@ -50,7 +45,7 @@ public class PrototypeCglibTest {
          * TODO
          * 对象复制的是引用！
          */
-        BeanCopier beanCopier =BeanCopier.create(MyHouse.class, MyHouse.class, false);
+        BeanCopier beanCopier = BeanCopier.create(MyHouse.class, MyHouse.class, false);
         beanCopier.copy(myHouse, myHouseCopy, null);
 
         ProtorypeTestHelper.assertObject(myHouse, myHouseCopy);
@@ -72,8 +67,8 @@ public class PrototypeCglibTest {
         myTV.setTvCpu(tvCpu = new TVCpu());
         tvCpu.setName("冲天CPU2");
         tvCpu.setKernelNumber(8);
-        List<TVMemory> tvMemories;
-        myTV.setTvMemories(tvMemories = new ArrayList<TVMemory>());
+        List<TVMemory> tvMemories = new ArrayList<>();
+        myTV.setTvMemories(tvMemories);
         TVMemory tvMemory1;
         tvMemories.add(tvMemory1 = new TVMemory());
         tvMemory1.setName("冲天Memory12");

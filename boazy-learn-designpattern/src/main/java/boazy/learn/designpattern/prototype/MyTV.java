@@ -5,7 +5,6 @@ import java.util.List;
 
 /**
  * @author boazy
- * @company boazy
  * @date 2018/8/5
  */
 public class MyTV implements Serializable {
