@@ -8,7 +8,7 @@ public class DelegateTargetB implements DelegateTarget {
 
     @Override
     public void handling(String target) {
-        System.out.println("我是B，我来处理" + target);
+        System.out.println("我是被委派者B，我来处理" + target);
     }
 
 }
