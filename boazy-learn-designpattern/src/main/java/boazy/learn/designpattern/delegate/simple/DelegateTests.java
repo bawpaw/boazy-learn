@@ -7,10 +7,9 @@ package boazy.learn.designpattern.delegate.simple;
 public class DelegateTests {
 
     public static void main(String[] args) {
-        // 采用IBE查低价
-        new GdsClient().queryLowPrice("IBE", new GdsDataSourceDelegator());
-        // 采用Sabre查低价
-        new GdsClient().queryLowPrice("SABRE", new GdsDataSourceDelegator());
+        for(int i = 0; i < 10; i++) {
+            new GdsClient().queryLowPrice("查询条件" +(i + 1), new GdsDataSourceDelegator());
+        }
     }
 
 }

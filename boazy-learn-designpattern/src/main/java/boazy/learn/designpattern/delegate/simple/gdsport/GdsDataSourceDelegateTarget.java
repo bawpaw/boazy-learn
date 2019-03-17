@@ -1,4 +1,4 @@
-package boazy.learn.designpattern.delegate.simple;
+package boazy.learn.designpattern.delegate.simple.gdsport;
 
 /**
  * 被委派者接口
@@ -8,6 +8,6 @@ package boazy.learn.designpattern.delegate.simple;
  */
 public interface GdsDataSourceDelegateTarget {
 
-    String queryLowPrice(String target);
+    String queryLowPrice(String queryParameter);
 
 }

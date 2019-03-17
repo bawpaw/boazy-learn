@@ -6,8 +6,8 @@ package boazy.learn.designpattern.delegate.simple;
  */
 public class GdsClient {
 
-    public String queryLowPrice(String target, GdsDataSourceDelegator delegator) {
-        return delegator.queryLowPrice(target);
+    public String queryLowPrice(String queryParameter, GdsDataSourceDelegator delegator) {
+        return delegator.queryLowPrice(queryParameter);
     }
 
 }
