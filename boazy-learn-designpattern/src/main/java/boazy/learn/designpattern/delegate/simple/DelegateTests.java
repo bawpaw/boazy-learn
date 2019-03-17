@@ -4,7 +4,7 @@ package boazy.learn.designpattern.delegate.simple;
  * @author boazy
  * @date 2019/3/13
  */
-public class DelegatorTests {
+public class DelegateTests {
 
     public static void main(String[] args) {
         /**
