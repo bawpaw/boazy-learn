@@ -1,6 +1,8 @@
 package boazy.learn.designpattern.delegate.simple;
 
 /**
+ * 被委派者
+ *
  * @author boazy
  * @date 2019/3/13
  */

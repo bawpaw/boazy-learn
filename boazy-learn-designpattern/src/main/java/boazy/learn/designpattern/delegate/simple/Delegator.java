@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 委派者
+ *
  * @author boazy
  * @date 2019/3/13
  */
