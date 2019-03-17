@@ -6,8 +6,8 @@ package boazy.learn.designpattern.delegate.simple;
  * @author boazy
  * @date 2019/3/13
  */
-public interface DelegateTarget {
+public interface GdsDataSourceDelegateTarget {
 
-    void handling(String target);
+    String queryLowPrice(String target);
 
 }
