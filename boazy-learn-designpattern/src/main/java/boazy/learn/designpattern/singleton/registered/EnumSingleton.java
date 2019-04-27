@@ -1,4 +1,4 @@
-package boazy.learn.designpattern.single.registered;
+package boazy.learn.designpattern.singleton.registered;
 
 /**
  * 枚举单例

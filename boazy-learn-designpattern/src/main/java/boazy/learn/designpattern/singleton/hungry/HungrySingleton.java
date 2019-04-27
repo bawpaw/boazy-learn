@@ -1,4 +1,4 @@
-package boazy.learn.designpattern.single.hungry;
+package boazy.learn.designpattern.singleton.hungry;
 
 /**
  * 饿汉式（饥饿式）单例

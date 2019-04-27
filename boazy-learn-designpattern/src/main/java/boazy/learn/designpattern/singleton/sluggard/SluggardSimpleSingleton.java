@@ -1,4 +1,4 @@
-package boazy.learn.designpattern.single.sluggard;
+package boazy.learn.designpattern.singleton.sluggard;
 
 /**
  * 懒汉式单例（双重检查）

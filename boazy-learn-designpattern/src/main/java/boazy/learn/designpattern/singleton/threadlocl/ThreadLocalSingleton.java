@@ -1,4 +1,4 @@
-package boazy.learn.designpattern.single.threadlocl;
+package boazy.learn.designpattern.singleton.threadlocl;
 
 /**
  * ThreadLocal单例

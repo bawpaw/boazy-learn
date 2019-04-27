@@ -1,4 +1,4 @@
-package boazy.learn.designpattern.single.sluggard;
+package boazy.learn.designpattern.singleton.sluggard;
 
 import java.util.concurrent.locks.ReentrantLock;
 

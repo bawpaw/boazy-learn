@@ -1,9 +1,9 @@
-package boazy.learn.designpattern.single;
+package boazy.learn.designpattern.singleton;
 
-import boazy.learn.designpattern.single.hungry.HungrySingleton;
-import boazy.learn.designpattern.single.registered.EnumSingleton;
-import boazy.learn.designpattern.single.sluggard.SluggardInnerClassSingleton;
-import boazy.learn.designpattern.single.sluggard.SluggardSimpleSingleton;
+import boazy.learn.designpattern.singleton.hungry.HungrySingleton;
+import boazy.learn.designpattern.singleton.registered.EnumSingleton;
+import boazy.learn.designpattern.singleton.sluggard.SluggardInnerClassSingleton;
+import boazy.learn.designpattern.singleton.sluggard.SluggardSimpleSingleton;
 import org.junit.Test;
 
 import java.util.concurrent.CountDownLatch;

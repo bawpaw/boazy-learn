@@ -1,4 +1,4 @@
-package boazy.learn.designpattern.single.registered;
+package boazy.learn.designpattern.singleton.registered;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
