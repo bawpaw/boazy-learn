@@ -1,5 +1,7 @@
 package boazy.learn.designpattern.proxy.staticproxy;
 
+import boazy.learn.designpattern.proxy.ExpressBusiness;
+
 /**
  * @author boazy
  * @company boazy

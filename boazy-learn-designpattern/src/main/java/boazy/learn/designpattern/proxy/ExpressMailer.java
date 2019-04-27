@@ -1,4 +1,4 @@
-package boazy.learn.designpattern.proxy.staticproxy;
+package boazy.learn.designpattern.proxy;
 
 /**
  * @author boazy
