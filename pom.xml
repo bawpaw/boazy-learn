@@ -21,6 +21,7 @@
         <module>boazy-learn-rmi</module>
         <module>boazy-learn-api</module>
         <module>boazy-learn-swagger</module>
+        <module>rpc4netty</module>
     </modules>
 
     <dependencyManagement>
