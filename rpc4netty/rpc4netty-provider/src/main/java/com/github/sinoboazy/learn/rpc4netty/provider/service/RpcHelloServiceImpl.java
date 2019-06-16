@@ -1,12 +1,14 @@
 package com.github.sinoboazy.learn.rpc4netty.provider.service;
 
 import com.github.sinoboazy.learn.rpc4netty.api.RpcHelloService;
+import com.github.sinoboazy.learn.rpc4netty.provider.core.RpcService;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author boazy
  * @date 2019/6/17
  */
+@RpcService
 public class RpcHelloServiceImpl implements RpcHelloService {
 
     @Override
