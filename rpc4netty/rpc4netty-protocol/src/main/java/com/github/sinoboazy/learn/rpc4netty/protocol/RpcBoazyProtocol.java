@@ -21,6 +21,10 @@ public class RpcBoazyProtocol implements Serializable {
      */
     private String serviceName;
     /**
+     * 服务版本
+     */
+    private String version;
+    /**
      * 服务方法名
      */
     private String methodName;
