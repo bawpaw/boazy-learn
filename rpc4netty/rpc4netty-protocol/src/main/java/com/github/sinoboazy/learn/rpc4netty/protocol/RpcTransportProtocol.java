@@ -21,8 +21,16 @@ public class RpcTransportProtocol implements Serializable {
      */
     private String serviceName;
     /**
-     * 服务版本
+     * 服务方法名
      */
-    private String version;
+    private String methodName;
+    /**
+     * 参数类型数组
+     */
+    private Class<?>[] argsClass;
+    /**
+     * 参数值数组
+     */
+    private Object[] args;
 
 }

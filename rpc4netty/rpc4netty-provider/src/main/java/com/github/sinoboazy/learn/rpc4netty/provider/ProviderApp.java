@@ -1,5 +1,6 @@
 package com.github.sinoboazy.learn.rpc4netty.provider;
 
+import com.github.sinoboazy.learn.rpc4netty.provider.core.RpcProviderServer;
 import com.github.sinoboazy.learn.rpc4netty.provider.core.SimpleIocContainer;
 
 /**
@@ -20,8 +21,9 @@ public class ProviderApp {
         // 1、扫描服务并注册到Ioc容器
         SimpleIocContainer.scanService(packagePath);
         // 2、扫描RPC服务注册到注册中心
-
+        // TODO
         // 3、启动Server监听
+        new RpcProviderServer().startServer(thisAppPort);
 
     }
 

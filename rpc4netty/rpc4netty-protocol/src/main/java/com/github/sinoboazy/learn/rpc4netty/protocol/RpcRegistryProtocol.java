@@ -21,16 +21,12 @@ public class RpcRegistryProtocol implements Serializable {
      */
     private String serviceName;
     /**
-     * 服务方法名
+     * 服务版本
      */
-    private String methodName;
+    private String version;
     /**
-     * 参数类型数组
+     * 服务端口
      */
-    private Class<?>[] argsClass;
-    /**
-     * 参数值数组
-     */
-    private Object[] args;
+    private int port;
 
 }

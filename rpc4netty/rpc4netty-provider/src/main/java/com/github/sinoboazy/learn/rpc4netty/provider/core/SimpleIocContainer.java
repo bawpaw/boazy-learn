@@ -19,8 +19,8 @@ public class SimpleIocContainer {
         SERVICE_MAP.put(key, service);
     }
 
-    public static void get(String key) {
-        SERVICE_MAP.get(key);
+    public static Object get(String key) {
+        return SERVICE_MAP.get(key);
     }
 
     public static boolean containsKey(String key) {
@@ -49,7 +49,7 @@ public class SimpleIocContainer {
             // 获取class
             Class<?> clazz = Class.forName(className);
             // 创建实例并注册到ioc容器中
-            add(className, clazz.newInstance());
+            add(clazz.getInterfaces()[0].getName(), clazz.newInstance());
         }
     }
 

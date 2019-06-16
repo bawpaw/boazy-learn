@@ -13,7 +13,9 @@ public class RpcHelloServiceImpl implements RpcHelloService {
 
     @Override
     public String hello(String name) {
-        return StringUtils.join("Hello ", name, "! I am rpc4netty.");
+        String result = StringUtils.join("Hello ", name, "! I am rpc4netty.");
+        System.out.println("result：" + result);
+        return result;
     }
 
 }
