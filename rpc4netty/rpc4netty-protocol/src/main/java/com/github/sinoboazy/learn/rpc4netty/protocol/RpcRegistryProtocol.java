@@ -17,6 +17,10 @@ public class RpcRegistryProtocol implements Serializable {
     private static final long serialVersionUID = 3609633675201699157L;
 
     /**
+     * 方法（SUB表示订阅服务、PUB表求发布服务）
+     */
+    private String method;
+    /**
      * 服务名（采用className）
      */
     private String serviceName;
@@ -24,6 +28,10 @@ public class RpcRegistryProtocol implements Serializable {
      * 服务版本
      */
     private String version;
+    /**
+     * 服务地址
+     */
+    private String host;
     /**
      * 服务端口
      */

@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SimpleIocContainer {
 
-    private static final ConcurrentHashMap<String, Object> SERVICE_MAP = new ConcurrentHashMap<>(256);
+    public static final ConcurrentHashMap<String, Object> SERVICE_MAP = new ConcurrentHashMap<>(256);
 
     public static void add(String key, Object service) {
         SERVICE_MAP.put(key, service);
