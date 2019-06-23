@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
  * @author boazy
  * @date 2019/6/18
  */
-@Target({ElementType.TYPE})
+@Target({ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Reference {
+public @interface RpcReference {
     String version() default "";
 }
