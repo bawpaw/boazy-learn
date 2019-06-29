@@ -16,7 +16,7 @@ public class ContainerSingleton {
 
     private static final Map<String, Object> IOC = new ConcurrentHashMap<>();
 
-    public static final Object getInstance(String className) {
+    public static Object getInstance(String className) {
         synchronized (IOC) {
             if (!IOC.containsKey(className)) {
                 return IOC.get(className);

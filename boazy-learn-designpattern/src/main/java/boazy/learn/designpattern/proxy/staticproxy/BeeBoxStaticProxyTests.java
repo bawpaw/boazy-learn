@@ -4,7 +4,6 @@ import boazy.learn.designpattern.proxy.ExpressMailer;
 
 /**
  * @author boazy
- * @company boazy
  * @date 2019/3/12
  */
 public class BeeBoxStaticProxyTests {

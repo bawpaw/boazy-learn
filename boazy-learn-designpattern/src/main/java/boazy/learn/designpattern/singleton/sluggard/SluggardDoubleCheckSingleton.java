@@ -1,7 +1,5 @@
 package boazy.learn.designpattern.singleton.sluggard;
 
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * 懒汉式单例（双重检查）
  * <p>
@@ -14,8 +12,6 @@ public class SluggardDoubleCheckSingleton {
     // 2、私有静态成员常量（用到时初始实例）
     // 采用volatile修饰解决指令重排序破坏单例问题
     private volatile static SluggardDoubleCheckSingleton sluggard;
-
-    private static final ReentrantLock LOCK = new ReentrantLock();
 
     // 1、构造方法私有化
     private SluggardDoubleCheckSingleton() {

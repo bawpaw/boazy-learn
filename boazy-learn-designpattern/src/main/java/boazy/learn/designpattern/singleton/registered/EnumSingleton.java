@@ -23,7 +23,7 @@ public enum EnumSingleton {
         return data;
     }
 
-    public static final EnumSingleton getInstance() {
+    public static EnumSingleton getInstance() {
         return INSTANCE;
     }
 

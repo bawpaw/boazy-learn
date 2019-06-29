@@ -5,7 +5,6 @@ import net.sf.cglib.core.DebuggingClassWriter;
 
 /**
  * @author boazy
- * @company boazy
  * @date 2019/4/27
  */
 public class CglibExpressBusinessProxyTests {

@@ -3,8 +3,11 @@ package boazy.learn.designpattern.proxy.staticproxy;
 import boazy.learn.designpattern.proxy.ExpressBusiness;
 
 /**
+ * 静态代理
+ * <p>
+ * 实现与被代理类相同接口、代理类持有被代理对象、实现相同方法进行方法前后的代理逻辑
+ *
  * @author boazy
- * @company boazy
  * @date 2019/3/12
  */
 public class BeeBoxStaticProxy implements ExpressBusiness {

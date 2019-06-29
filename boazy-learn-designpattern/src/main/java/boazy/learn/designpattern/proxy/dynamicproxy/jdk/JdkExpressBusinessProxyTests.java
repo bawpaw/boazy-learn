@@ -5,7 +5,6 @@ import boazy.learn.designpattern.proxy.ExpressMailer;
 
 /**
  * @author boazy
- * @company boazy
  * @date 2019/4/27
  */
 public class JdkExpressBusinessProxyTests {

@@ -1,7 +1,7 @@
-package boazy.learn.designpattern.prototype;
+package boazy.learn.designpattern.prototype.test;
 
+import boazy.learn.designpattern.prototype.*;
 import net.sf.cglib.beans.BeanCopier;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,12 @@ import java.util.List;
  */
 public class PrototypeCglibTest {
 
-    @Test
-    public void testCglib1() {
+    public static void main(String[] args) {
+        testCglib1();
+        testCglib2();
+    }
+
+    public static void testCglib1() {
         MyHouse myHouse = new MyHouse();
         myHouse.setName("我的房子2");
         myHouse.setPosition("广东省广州市增城区2");
@@ -51,8 +55,7 @@ public class PrototypeCglibTest {
         ProtorypeTestHelper.assertObject(myHouse, myHouseCopy);
     }
 
-    @Test
-    public void testCglib2() {
+    public static void testCglib2() {
         MyHouse myHouse = new MyHouse();
         myHouse.setName("我的房子2");
         myHouse.setPosition("广东省广州市增城区2");

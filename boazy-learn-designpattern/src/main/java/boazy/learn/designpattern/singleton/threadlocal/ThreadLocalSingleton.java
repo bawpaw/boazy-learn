@@ -1,4 +1,4 @@
-package boazy.learn.designpattern.singleton.threadlocl;
+package boazy.learn.designpattern.singleton.threadlocal;
 
 /**
  * ThreadLocal单例
@@ -16,7 +16,7 @@ public class ThreadLocalSingleton {
     private ThreadLocalSingleton() {
     }
 
-    public static final ThreadLocalSingleton getInstance() {
+    public static ThreadLocalSingleton getInstance() {
         return THREAD_LOCAL_INSTANCE.get();
     }
 

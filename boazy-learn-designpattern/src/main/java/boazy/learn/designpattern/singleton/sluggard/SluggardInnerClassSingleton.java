@@ -15,9 +15,7 @@ public class SluggardInnerClassSingleton {
     // 1、构造方法私有化
     private SluggardInnerClassSingleton() {
         // 添加判断避免通过反射创建实例破坏单例
-        if (null != StaticInnerClassHolder.SLUGGARD) {
-            throw new RuntimeException("Single instance class cannot create multiple instances");
-        }
+        throw new RuntimeException("Single instance class cannot create multiple instances");
     }
 
     // 2、内部静态类实例化对象
@@ -28,7 +26,7 @@ public class SluggardInnerClassSingleton {
     }
 
     // 3、提供静态获取实例方法
-    public static final SluggardInnerClassSingleton getInstance() {
+    public static SluggardInnerClassSingleton getInstance() {
         return StaticInnerClassHolder.SLUGGARD;
     }
 

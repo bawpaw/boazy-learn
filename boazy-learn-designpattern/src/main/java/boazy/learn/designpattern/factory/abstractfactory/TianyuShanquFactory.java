@@ -9,7 +9,6 @@ import boazy.learn.designpattern.factory.TianyuShanquPropertyServiceCentreImpl;
  * 抽象工厂模式（天誉花园三区）
  *
  * @author boazy
- * @company boazy
  * @date 2018/8/5
  */
 public class TianyuShanquFactory implements TianyuPlotAbstractFactory {

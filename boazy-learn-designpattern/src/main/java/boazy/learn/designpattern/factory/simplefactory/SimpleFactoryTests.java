@@ -1,17 +1,14 @@
-package boazy.learn.designpattern.factory;
+package boazy.learn.designpattern.factory.simplefactory;
 
-import boazy.learn.designpattern.factory.simplefactory.HouseSimpleFactory;
-import org.junit.Test;
+import boazy.learn.designpattern.factory.IHouse;
 
 /**
  * @author boazy
- * @company boazy
  * @date 2018/8/5
  */
-public class SimpleFactoryTest {
+public class SimpleFactoryTests {
 
-    @Test
-    public void testSimpleFactory() {
+    public static void main(String[] args) {
         IHouse house = HouseSimpleFactory.createInstance("82");
         System.out.println("简单工厂.房子：" + house.getHuserName());
 

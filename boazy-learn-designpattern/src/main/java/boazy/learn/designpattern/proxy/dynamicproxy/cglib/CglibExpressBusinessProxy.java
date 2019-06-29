@@ -8,7 +8,6 @@ import java.lang.reflect.Method;
 
 /**
  * @author boazy
- * @company boazy
  * @date 2019/4/27
  */
 public class CglibExpressBusinessProxy implements MethodInterceptor {

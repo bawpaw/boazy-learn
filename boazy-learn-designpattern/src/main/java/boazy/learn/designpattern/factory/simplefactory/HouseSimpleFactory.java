@@ -7,12 +7,11 @@ import boazy.learn.designpattern.factory.IHouse;
 
 /**
  * 简单工厂（房子简单工厂）
- *
+ * <p>
  * 违背开闭原则，每添加一个产品（一栋房子）都会导致修改工厂类
  * 工厂类的职责相对过重，不易于扩展过于复杂的产品结构
  *
  * @author boazy
- * @company boazy
  * @date 2018/8/5
  */
 public class HouseSimpleFactory {
@@ -24,11 +23,11 @@ public class HouseSimpleFactory {
      * @return type的IHouse实例
      */
     public static IHouse createInstance(String type) {
-        if("79".equalsIgnoreCase(type)) {
+        if ("79".equalsIgnoreCase(type)) {
             return new House79Impl();
-        } else if("82".equalsIgnoreCase(type)) {
+        } else if ("82".equalsIgnoreCase(type)) {
             return new House82Impl();
-        } else if("83".equalsIgnoreCase(type)) {
+        } else if ("83".equalsIgnoreCase(type)) {
             return new House83Impl();
         } else {
             throw new RuntimeException("type invalid.");

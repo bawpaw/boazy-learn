@@ -1,6 +1,6 @@
-package boazy.learn.designpattern.prototype;
+package boazy.learn.designpattern.prototype.test;
 
-import org.junit.Test;
+import boazy.learn.designpattern.prototype.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,8 +15,12 @@ import java.util.List;
  */
 public class PrototypeSerializableTest {
 
-    @Test
-    public void testSerializable1() {
+    public static void main(String[] args) {
+        testSerializable1();
+        testSerializable2();
+    }
+
+    public static void testSerializable1() {
         MyHouse myHouse = new MyHouse();
         myHouse.setName("我的房子");
         myHouse.setPosition("广东省广州市增城区");
@@ -89,8 +93,7 @@ public class PrototypeSerializableTest {
         ProtorypeTestHelper.assertObject(myHouse, myHouseCopy);
     }
 
-    @Test
-    public void testSerializable2() {
+    public static void testSerializable2() {
         MyHouse myHouse = new MyHouse();
         myHouse.setName("我的房子");
         myHouse.setPosition("广东省广州市增城区");

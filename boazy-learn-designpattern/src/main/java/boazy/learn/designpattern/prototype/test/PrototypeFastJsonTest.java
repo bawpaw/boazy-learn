@@ -1,7 +1,7 @@
-package boazy.learn.designpattern.prototype;
+package boazy.learn.designpattern.prototype.test;
 
+import boazy.learn.designpattern.prototype.*;
 import com.alibaba.fastjson.JSONObject;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,12 @@ import java.util.List;
  */
 public class PrototypeFastJsonTest {
 
-    @Test
-    public void testFastjson1() {
+    public static void main(String[] args) {
+        testFastjson1();
+        testFastjson2();
+    }
+
+    public static void testFastjson1() {
         MyHouse myHouse = new MyHouse();
         myHouse.setName("我的房子2");
         myHouse.setPosition("广东省广州市增城区2");
@@ -45,8 +49,7 @@ public class PrototypeFastJsonTest {
         ProtorypeTestHelper.assertObject(myHouse, myHouseCopy);
     }
 
-    @Test
-    public void testFastjson2() {
+    public static void testFastjson2() {
         MyHouse myHouse = new MyHouse();
         myHouse.setName("我的房子2");
         myHouse.setPosition("广东省广州市增城区2");

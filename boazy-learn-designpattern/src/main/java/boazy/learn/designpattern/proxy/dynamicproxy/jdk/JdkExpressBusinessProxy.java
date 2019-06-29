@@ -5,8 +5,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
+ * JDK动态代理
+ *
  * @author boazy
- * @company boazy
  * @date 2019/4/27
  */
 public class JdkExpressBusinessProxy implements InvocationHandler {
