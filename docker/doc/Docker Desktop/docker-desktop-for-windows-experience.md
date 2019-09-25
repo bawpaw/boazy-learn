@@ -19,7 +19,7 @@
 
 点击以下链接下载 [Stable](https://download.docker.com/win/stable/Docker for Windows Installer.exe) 或 [Edge](https://download.docker.com/win/edge/Docker Desktop Installer.exe) 版本的 [Docker Desktop for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows)。
 
-![](.\images\get-docker-desktop-for-windows.png)
+![](images\get-docker-desktop-for-windows.png)
 
 ***本文以下载 Stable 版本为例。***
 
@@ -29,7 +29,7 @@
 
 * 安装好后，查看 `About Docker Desktop`
 
-![About Docker Desktop](.\images\about-docker-dektop.png)
+![About Docker Desktop](images\about-docker-dektop.png)
 
 ## 配置镜像加速
 
@@ -41,9 +41,9 @@
 
 * 中科大镜像 `https://docker.mirrors.ustc.edu.cn`
 
-![](.\images\settings-daemon.png)
+![](images\settings-daemon.png)
 
-![](.\images\settings-daemon-advanced.png)
+![](images\settings-daemon-advanced.png)
 
 ```json
 {
@@ -74,11 +74,11 @@
 
   这里解压后目录为 `D:\Local\kubernetes\client\bin` 
 
-![](.\images\kubectl-dir.png)
+![](images\kubectl-dir.png)
 
 * 将 `kubectl` 加入到 `系统环境变量PATH` 中
 
-  ![](.\images\kubectl-home&path.png)
+  ![](images\kubectl-home&path.png)
 
 * 执行 `kubectl` 命令检查是否OK
 
@@ -86,7 +86,7 @@
   kubectl version
   ```
 
-  ![](.\images\kubectl-version.png)
+  ![](images\kubectl-version.png)
 
 ### 安装 kubernetes 镜像
 
@@ -124,7 +124,7 @@
 
 * Docker 中激活 Kubernetes
 
-  ![](.\images\docker-enable-kubernetes.png)
+  ![](images\docker-enable-kubernetes.png)
 
 ## 配置 Kubernetes Dashboard
 
@@ -161,7 +161,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/
 kubectl proxy
 ```
 
-![](.\images\kubectl-proxy.png)
+![](images\kubectl-proxy.png)
 
 ### 访问 Kubernetes dashboard
 
@@ -180,15 +180,15 @@ kubectl proxy
 
   **注意**，登陆是出现 `Not enough data to create auth info structure` 时，重新执行本命令即可！
 
-  ![](.\images\kube-config-dir.png)
+  ![](images\kube-config-dir.png)
 
 * 登录 dashboard 的时候选择 `C:\Users\XXX\.kube\config` 文件
 
-  ![](.\images\k8s_credentials.png)
+  ![](images\k8s_credentials.png)
 
 * 点击 `登录` 成功
 
-  ![](.\images\kubernetes-dashboard.png)
+  ![](images\kubernetes-dashboard.png)
 
 ## 安装并运行容器（Redis）
 
@@ -200,7 +200,7 @@ kubectl proxy
 docker search redis[:5.5]
 ```
 
-![](.\images\docker-search-redis.png)
+![](images\docker-search-redis.png)
 
 ### 拉取镜像
 
@@ -208,7 +208,7 @@ docker search redis[:5.5]
 docker pull redis[:5.5]
 ```
 
-![](.\images\docker-pull-redis.png)
+![](images\docker-pull-redis.png)
 
 ### 查看本地镜像
 
@@ -216,7 +216,7 @@ docker pull redis[:5.5]
 docker images
 ```
 
-![](.\images\docker-images.png)
+![](images\docker-images.png)
 
 ### 创建并运行容器
 
@@ -224,7 +224,7 @@ docker images
 docker run -d --restart=always --name redis -p 6379:6379 -v /D/DockerData/redis/data:/data redis:latest --appendonly yes --requirepass "123456"
 ```
 
-![](.\images\docker-run-redis.png)
+![](images\docker-run-redis.png)
 
 ### 列出容器
 
@@ -232,11 +232,11 @@ docker run -d --restart=always --name redis -p 6379:6379 -v /D/DockerData/redis/
 docker ps -as
 ```
 
-![](.\images\docker-ps-as.png)
+![](images\docker-ps-as.png)
 
 ### 客户端接连 redis（检查可用）
 
-![](.\images\connect-docker-redis-test.png)
+![](images\connect-docker-redis-test.png)
 
 ## 用到相关 Docker 命令
 
