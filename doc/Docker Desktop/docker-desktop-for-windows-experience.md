@@ -21,7 +21,7 @@
 
 点击以下链接下载 [Stable](https://download.docker.com/win/stable/Docker for Windows Installer.exe) 或 [Edge](https://download.docker.com/win/edge/Docker Desktop Installer.exe) 版本的 [Docker Desktop for Windows](https://hub.docker.com/editions/community/docker-ce-desktop-windows)。
 
-![](.\images\get-docker-desktop-for-windows.png)
+![](images/get-docker-desktop-for-windows.png)
 
 ***本文以下载 Stable 版本为例。***
 
@@ -31,7 +31,7 @@
 
 * 安装好后，查看 `About Docker Desktop`
 
-![About Docker Desktop](.\images\about-docker-dektop.png)
+![About Docker Desktop](images/about-docker-dektop.png)
 
 ## 配置镜像加速
 
@@ -43,9 +43,9 @@
 
 * 中科大镜像 `https://docker.mirrors.ustc.edu.cn`
 
-![](.\images\settings-daemon.png)
+![](images/settings-daemon.png)
 
-![](.\images\settings-daemon-advanced.png)
+![](images/settings-daemon-advanced.png)
 
 ```json
 {
