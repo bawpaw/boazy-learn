@@ -363,31 +363,17 @@ docker network ls
 
 ### zookeeper
 
+* `zookeeper 3.5.5` 版本
+
 ```bash
 docker run -d --restart=always --name zookeeper -p 2181:2181 -v /D/DockerData/zookeeper/zk1/data:/data -v /D/DockerData/zookeeper/zk1/datalog:/datalog -e "TZ=Asia/Shanghai" zookeeper:latest
 ```
 
-### nacos/nacos-server
-
-```bash
-docker run -d --restart=always --name nacos --env MODE=standalone -p 8848:8848 nacos/nacos-server:latest
-```
-
-### mysql
-
-```bash
-docker run -d --restart=always --name mysql -p 3306:3306 -v /D/DockerData/mysql/mysql:/var/lib/mysql -v /D/DockerData/mysql/conf:/etc/mysql/conf.d -e MYSQL_ROOT_PASSWORD=duanbo mysql:latest --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-```
-
-### jenkins
-
-```bash
-docker run -d --restart=always --name jenkins -p 8088:8080 --restart always -v /D/DockerData/jenkins/jenkins_home:/var/jenkins_home -t jenkins:latest
-```
-
 ### zookeeper 集群（方式1）
 
-* 采用 `host.docker.internal` 访问宿机
+* `zookeeper 3.5.5` 版本
+
+- 采用 `host.docker.internal` 访问宿机
 
   `好像是 18.03 版本开始支持 host.docker.internal`
 
@@ -395,7 +381,7 @@ docker run -d --restart=always --name jenkins -p 8088:8080 --restart always -v /
   host.docker.internal
   ```
 
-* ZOO_SERVERS 中 server.x 参数的地址后面一定要配置 `;2181` 端口，否则成功了也连接不了
+- ZOO_SERVERS 中 server.x 参数的地址后面一定要配置 `;2181` 端口，否则成功了也连接不了
 
   `没有添加 ;2181 怎么搞都连接不了（telnet 直接退出），后来搞个可访方的单个 zookeeper 查看它的 /conf/zoo.cfg 配置文件发现参数 server.1=localhost:2888:3888;2181 后面带了 ;2181 看到这个好像明白了为什么不能访问！`
 
@@ -405,7 +391,7 @@ docker run -d --restart=always --name jenkins -p 8088:8080 --restart always -v /
   server.1=0.0.0.0:2888:3888;2181
   ```
 
-* `docker run` 创建并运行 zookeeper 集群（均正常访问 2181、2182、2183 端口）
+- `docker run` 创建并运行 zookeeper 集群（均正常访问 2181、2182、2183 端口）
 
   ```bash
   ### 运行节点zk1
@@ -418,7 +404,7 @@ docker run -d --restart=always --name jenkins -p 8088:8080 --restart always -v /
   docker run -d --restart always --name zk3 -p 2183:2181 -p 2889:2888 -p 3889:3888 -v /D/DockerData/zookeeper/zk3/data:/data -v /D/DockerData/zookeeper/zk3/datalog:/datalog -e "TZ=Asia/Shanghai" -e "ZOO_MY_ID=3" -e "ZOO_SERVERS=server.1=host.docker.internal:2887:3887;2181 server.2=host.docker.internal:2888:3888;2182 server.3=0.0.0.0:2888:3888;2181" zookeeper:latest
   ```
 
-* 可能出现的问题
+- 可能出现的问题
 
   配置 `-v /D/DockerData/zookeeper/zk1/conf:/conf` 出现如下错误：
 
@@ -435,7 +421,159 @@ docker run -d --restart=always --name jenkins -p 8088:8080 --restart always -v /
   log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
   ```
 
-  使用容器间访问 `docker network create inet` 和 `--network inet --network-alias zk1` 也不行，容器间 `3888` 访问不通，这个方法实验失败
+  使用容器间访问 `docker network create zk_net 和 `--network zk_net--network-alias zk1` 也不行，容器间 `3888` 访问不通，这个方法实验失败
+
+### zookeeper 集群（方式2）
+
+* `zookeeper 3.5.5` 版本
+
+* 这个方式试验成功，正常启动正常访问
+
+```bash
+### 创建 zk_net 网络 (用于ZK容器内部通信使用)
+docker network create zk_net
+
+### 运行节点zk1
+docker run -d --restart always --network zk_net --network-alias zk1 --name zk1 -p 2181:2181 -v /D/DockerData/zookeeper/zk1/data:/data -v /D/DockerData/zookeeper/zk1/datalog:/datalog -e "TZ=Asia/Shanghai" -e "ZOO_MY_ID=1" -e "ZOO_SERVERS=server.1=0.0.0.0:2888:3888;2181 server.2=zk2:2888:3888;2181 server.3=zk3:2888:3888;2181" zookeeper:latest
+
+### 运行节点zk2
+docker run -d --restart always --network zk_net --network-alias zk2 --name zk2 -p 2182:2181 -v /D/DockerData/zookeeper/zk2/data:/data -v /D/DockerData/zookeeper/zk2/datalog:/datalog -e "TZ=Asia/Shanghai" -e "ZOO_MY_ID=2" -e "ZOO_SERVERS=server.1=zk1:2888:3888;2181 server.2=0.0.0.0:2888:3888;2181 server.3=zk3:2888:3888;2181" zookeeper:latest
+
+### 运行节点zk3
+docker run -d --restart always --network zk_net --network-alias zk3 --name zk3 -p 2183:2181 -v /D/DockerData/zookeeper/zk3/data:/data -v /D/DockerData/zookeeper/zk3/datalog:/datalog -e "TZ=Asia/Shanghai" -e "ZOO_MY_ID=3" -e "ZOO_SERVERS=server.1=zk1:2888:3888;2181 server.2=zk2:2888:3888;2181 server.3=0.0.0.0:2888:3888;2181" zookeeper:latest
+```
+
+### mysql
+
+* `8.0.17` 版本
+
+* https://blog.csdn.net/qq_26462567/article/details/86713638
+
+```bash
+docker run -d --restart=always --name mysql -p 3306:3306 -v /D/DockerData/mysql/data:/var/lib/mysql -v /D/DockerData/mysql/log:/var/log/mysql -e "TZ=Asia/Shanghai" -e MYSQL_ROOT_PASSWORD=duanbo mysql:latest --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+```
+
+* **安装后要做的事（避免后面使用遇到一堆错误）**
+
+```bash
+### 连接数据库
+docker exec -it mysql mysql -u root -p
+### 输入密码
+### 切换为 mysql 库
+use mysql;
+### 设置远程访问
+### 1130-host '172.0.0.1' is not allowed to connect to this MySql server
+### https://blog.csdn.net/h996666/article/details/80921913
+grant all privileges on *.* to 'root'@'%';
+
+### 查询加密方式
+select Host,User,plugin from user;
++-----------+------------------+-----------------------+
+| Host      | User             | plugin                |
++-----------+------------------+-----------------------+
+| %         | root             | caching_sha2_password |
+| localhost | mysql.infoschema | caching_sha2_password |
+| localhost | mysql.session    | caching_sha2_password |
+| localhost | mysql.sys        | caching_sha2_password |
+| localhost | root             | caching_sha2_password |
++-----------+------------------+-----------------------+
+5 rows in set (0.00 sec)
+### 修改为 mysql_native_password 
+### 2059 - Authentication plugin 'caching_sha2_password' cannot be loaded:...'
+### java.sql.SQLException: Unable to load authentication plugin 'caching_sha2_password'.
+alter user 'root'@'%' identified with mysql_native_password by 'duanbo';
+### 查询加密方式
+select Host,User,plugin from user;
++-----------+------------------+-----------------------+
+| Host      | User             | plugin                |
++-----------+------------------+-----------------------+
+| %         | root             | mysql_native_password |
+| localhost | mysql.infoschema | caching_sha2_password |
+| localhost | mysql.session    | caching_sha2_password |
+| localhost | mysql.sys        | caching_sha2_password |
+| localhost | root             | caching_sha2_password |
++-----------+------------------+-----------------------+
+5 rows in set (0.00 sec)
+
+### mysqladmin -u root -p flush-hosts
+### 1129-host '172.0.0.1' is blocked because of many connection errors; unblock with ‘mysqladmin flush-hosts’
+flush hosts;
+### 查询 max_connect_errors 参数值
+show variables like '%max_connect_errors%';
++--------------------+-------+
+| Variable_name      | Value |
++--------------------+-------+
+| max_connect_errors | 100   |
++--------------------+-------+
+1 row in set (0.03 sec)
+### 设置 max_connect_errors 参数值
+set global max_connect_errors = 1000;
+### 查询 max_connect_errors 参数值
+show variables like '%max_connect_errors%';
++--------------------+-------+
+| Variable_name      | Value |
++--------------------+-------+
+| max_connect_errors | 1000  |
++--------------------+-------+
+1 row in set (0.01 sec)
+```
+
+### nacos/nacos-server
+
+* `Naocs 1.1.3` 版本
+
+```bash
+docker run -d --restart=always --name nacos --env MODE=standalone -p 8848:8848nacos/nacos-server:latest
+```
+
+### nacos/nacos-server 集群（方式1）
+
+- `Naocs 1.1.3` 版本
+
+```bash
+### nacos1
+docker run -d --restart=always --name nacos1 -p 8818:8848 --env MODE=cluster --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="host.docker.internal:8818 host.docker.internal:8828 host.docker.internal:8838" --env MYSQL_DATABASE_NUM=1 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
+
+### nacos2
+docker run -d --restart=always --name nacos2 -p 8828:8848 --env MODE=cluster --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="host.docker.internal:8818 host.docker.internal:8828 host.docker.internal:8838" --env MYSQL_DATABASE_NUM=1 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
+
+### nacos3
+docker run -d --restart=always --name nacos3 -p 8838:8848 --env MODE=cluster --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="host.docker.internal:8818 host.docker.internal:8828 host.docker.internal:8838" --env MYSQL_DATABASE_NUM=1 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
+```
+
+### nacos/nacos-server 集群（方式2）
+
+* `Naocs 1.1.3` 版本
+* 参考
+  - https://www.cnblogs.com/FlyAway2013/p/11201250.html
+  - https://www.cnblogs.com/hellxz/p/nacos-cluster-docker.html
+
+```bash
+### 创建 nacos 网络
+docker network create nacos_net
+
+### nacos1
+docker run -d --restart=always --network nacos_net --network-alias nacos1 --name nacos1 -p 8818:8848 --env MODE=cluster --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="nacos1:8848 nacos2:8848 nacos3:8848" --env MYSQL_DATABASE_NUM=1 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
+
+### nacos2
+docker run -d --restart=always --network nacos_net --network-alias nacos2 --name nacos2 -p 8828:8848 --env MODE=cluster --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="nacos1:8848 nacos2:8848 nacos3:8848" --env MYSQL_DATABASE_NUM=1 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
+
+### nacos3
+docker run -d --restart=always --network nacos_net --network-alias nacos3 --name nacos3 -p 8838:8848 --env MODE=cluster --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="nacos1:8848 nacos2:8848 nacos3:8848" --env MYSQL_DATABASE_NUM=1 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
+```
+
+* 
+
+```bash
+### nacos-ngx
+docker run -d --restart=always --network nacos_net --network-alias nacos-ngx --name nacos-ngx -p 8848:80 nginx:latest
+```
+
+### jenkins
+
+```bash
+docker run -d --restart=always --name jenkins -p 8088:8080 --restart always -v /D/DockerData/jenkins/jenkins_home:/var/jenkins_home -t jenkins:latest
+```
 
 ### centos
 
@@ -521,6 +659,25 @@ docker run -p 9903:9903 -d --restart=always --name gds-instant-app km-pigeon/gds
   mvn clean package docker:build
   ```
 
+## 缘分问题
 
+### Docker 重起后容器不自动启动
 
+* 右击任务栏 Docker 图标 `Restart` 或 `Quit Docker Deskto` 后之前正常的 zookeeper 容器不会自动启动
 
+  通过命令 `docker start zk1` 启动报错如下错误：
+
+  ```bash
+  Error response from daemon: driver failed programming external connectivity on endpoint zk1 (7cfb61e95c9ae834e3339d98574ac96f12ab94659bcf573a2a50204ff38164e6): Error starting userland proxy: /forwards/expose/port returned unexpected status: 500
+  Error: failed to start containers: zk1
+  ```
+
+* 解决方法
+
+  参考：https://qiita.com/masaoops/items/e79157ec89cd991ef8d2
+
+  * Quit Docker Desktop（右击任务栏图标）
+  * 进入 `Windows 任务管理器`，干掉进程 `com.docker.backend.exe` 进程
+  * 过一会 `com.docker.backend.exe` 进程会自己重新启动好
+  * 再打开 Docker Desktop （双击桌面图标）
+  * 当 Docker Desktop 启动好后，zookeeper 容器也自动成功正常启动完了
