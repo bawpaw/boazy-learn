@@ -526,48 +526,137 @@ show variables like '%max_connect_errors%';
 docker run -d --restart=always --name nacos --env MODE=standalone -p 8848:8848nacos/nacos-server:latest
 ```
 
-### nacos/nacos-server 集群（方式1）
-
-- `Naocs 1.1.3` 版本
-
-```bash
-### nacos1
-docker run -d --restart=always --name nacos1 -p 8818:8848 --env MODE=cluster --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="host.docker.internal:8818 host.docker.internal:8828 host.docker.internal:8838" --env MYSQL_DATABASE_NUM=1 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
-
-### nacos2
-docker run -d --restart=always --name nacos2 -p 8828:8848 --env MODE=cluster --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="host.docker.internal:8818 host.docker.internal:8828 host.docker.internal:8838" --env MYSQL_DATABASE_NUM=1 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
-
-### nacos3
-docker run -d --restart=always --name nacos3 -p 8838:8848 --env MODE=cluster --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="host.docker.internal:8818 host.docker.internal:8828 host.docker.internal:8838" --env MYSQL_DATABASE_NUM=1 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
-```
-
-### nacos/nacos-server 集群（方式2）
+### nacos/nacos-server 集群
 
 * `Naocs 1.1.3` 版本
+
 * 参考
+  
+  * https://github.com/nacos-group/nacos-docker
+  
   - https://www.cnblogs.com/FlyAway2013/p/11201250.html
   - https://www.cnblogs.com/hellxz/p/nacos-cluster-docker.html
+  
+* 数据持久化到 `mysql` 数据库中（nacos 的数据库创建相关这里不讲，请自行查阅官网）
+
+* mysql 8.0.x 版本要使用 8.0.x 版本的驱动包
+
+  * 不更为使用 `8.0.x` 驱动包会报错 `SQLException: Unknown system variable 'tx_read_only'`
+
+  * https://github.com/nacos-group/nacos-docker/issues/56
+
+  ```bash
+  ### 将驱动包放到 /D/DockerData/nacos/nacosX/plugins/mysql 并挂载
+  -v /D/DockerData/nacos/nacosX/plugins/mysql:/home/nacos/plugins/mysql
+  ```
 
 ```bash
 ### 创建 nacos 网络
 docker network create nacos_net
 
 ### nacos1
-docker run -d --restart=always --network nacos_net --network-alias nacos1 --name nacos1 -p 8818:8848 --env MODE=cluster --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="nacos1:8848 nacos2:8848 nacos3:8848" --env MYSQL_DATABASE_NUM=1 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
+docker run -d --restart=always --network nacos_net --network-alias nacos1 --name nacos1 --hostname nacos1 -p 8818:8848 -v /D/DockerData/nacos/nacos1/logs:/home/nacos/logs -v /D/DockerData/nacos/nacos1/plugins/mysql:/home/nacos/plugins/mysql --env MODE=cluster --env PREFER_HOST_MODE=hostname --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="nacos1:8848 nacos2:8848 nacos3:8848" --env MYSQL_DATABASE_NUM=2 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_SLAVE_SERVICE_HOST=host.docker.internal --env MYSQL_SLAVE_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
 
 ### nacos2
-docker run -d --restart=always --network nacos_net --network-alias nacos2 --name nacos2 -p 8828:8848 --env MODE=cluster --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="nacos1:8848 nacos2:8848 nacos3:8848" --env MYSQL_DATABASE_NUM=1 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
+docker run -d --restart=always --network nacos_net --network-alias nacos2 --name nacos2 --hostname nacos2 -p 8828:8848 -v /D/DockerData/nacos/nacos2/logs:/home/nacos/logs -v /D/DockerData/nacos/nacos2/plugins/mysql:/home/nacos/plugins/mysql --env MODE=cluster --env PREFER_HOST_MODE=hostname --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="nacos1:8848 nacos2:8848 nacos3:8848" --env MYSQL_DATABASE_NUM=2 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_SLAVE_SERVICE_HOST=host.docker.internal --env MYSQL_SLAVE_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
 
 ### nacos3
-docker run -d --restart=always --network nacos_net --network-alias nacos3 --name nacos3 -p 8838:8848 --env MODE=cluster --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="nacos1:8848 nacos2:8848 nacos3:8848" --env MYSQL_DATABASE_NUM=1 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
+docker run -d --restart=always --network nacos_net --network-alias nacos3 --name nacos3 --hostname nacos3 -p 8838:8848 -v /D/DockerData/nacos/nacos3/logs:/home/nacos/logs -v /D/DockerData/nacos/nacos3/plugins/mysql:/home/nacos/plugins/mysql --env MODE=cluster --env PREFER_HOST_MODE=hostname --env NACOS_SERVER_PORT=8848 --env SPRING_DATASOURCE_PLATFORM=mysql --env NACOS_SERVERS="nacos1:8848 nacos2:8848 nacos3:8848" --env MYSQL_DATABASE_NUM=2 --env MYSQL_MASTER_SERVICE_HOST=host.docker.internal --env MYSQL_MASTER_SERVICE_PORT=3306 --env MYSQL_SLAVE_SERVICE_HOST=host.docker.internal --env MYSQL_SLAVE_SERVICE_PORT=3306 --env MYSQL_MASTER_SERVICE_DB_NAME=nacos_config --env MYSQL_MASTER_SERVICE_USER=root --env MYSQL_MASTER_SERVICE_PASSWORD=duanbo nacos/nacos-server:latest
 ```
 
-* 
+### nginx
+
+* `Nginx 1.17.4` 版本
+
+* 这里代理上面创建的 `nacos cluster`
 
 ```bash
 ### nacos-ngx
-docker run -d --restart=always --network nacos_net --network-alias nacos-ngx --name nacos-ngx -p 8848:80 nginx:latest
+docker run -d --restart=always --network nacos_net --network-alias nacos-ngx --name nacos-ngx --hostname nacos-ngx -p 8848:80 -v /D/DockerData/nacos-ngx/html:/usr/share/nginx/html -v /D/DockerData/nacos-ngx/conf/nginx.conf:/etc/nginx/nginx.conf -v /D/DockerData/nacos-ngx/conf.d:/etc/nginx/conf.d -v /D/DockerData/nacos-ngx/logs:/var/log/nginx nginx:latest
 ```
+
+* `/etc/nginx/nginx.conf` 添加 `upstream nacos_cluster {...}` 配置
+
+  `http` 节点下添加 `upstream` 命名为 `nacos_cluster`，要添加在 `include /etc/nginx/conf.d/*.conf;` 之前！
+
+  详见以下配置信息：
+
+  ```bash
+  user  nginx;
+  worker_processes  1;
+  
+  error_log  /var/log/nginx/error.log warn;
+  pid        /var/run/nginx.pid;
+  
+  
+  events {
+      worker_connections  1024;
+  }
+  
+  
+  http {
+      include       /etc/nginx/mime.types;
+      default_type  application/octet-stream;
+  
+      log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+  
+      access_log  /var/log/nginx/access.log  main;
+  
+      sendfile        on;
+      #tcp_nopush     on;
+  
+      keepalive_timeout  65;
+  
+      #gzip  on;
+  	
+      upstream nacos_cluster {
+          server nacos1:8848;
+          server nacos2:8848;
+          server nacos3:8848;
+      }
+  
+      include /etc/nginx/conf.d/*.conf;
+  	
+  }
+  ```
+
+* `/etc/nginx/conf.d` 添加 `location /nacos {...}` 节点和修改 `locastion / {...}` 节点
+
+  详见以下配置信息：
+
+  ```bash
+  server {
+      listen       80;
+      server_name  localhost;
+  
+      #charset koi8-r;
+      #access_log  /var/log/nginx/host.access.log  main;
+  	
+  	location /nacos {
+          proxy_pass http://nacos_cluster/nacos;
+          # 请使用 $http_host 别使用 $host
+          # 否则访问 http://127.0.0.1:8848/nacos 会重定向到 http://127.0.0.1/nacos/ 打不开
+  		proxy_set_header Host $http_host;
+      }
+  
+      location / {
+  		proxy_pass http://nacos_cluster;
+          #root   /usr/share/nginx/html;
+          #index  index.html index.htm;
+      }
+  
+      #error_page  404              /404.html;
+  
+      # redirect server error pages to the static page /50x.html
+      #
+      error_page   500 502 503 504  /50x.html;
+      location = /50x.html {
+          root   /usr/share/nginx/html;
+      }
+  }
+  ```
 
 ### jenkins
 
