@@ -572,7 +572,7 @@ docker run -d --restart=always --network nacos_net --network-alias nacos3 --name
 
 ```bash
 ### nacos-ngx
-docker run -d --restart=always --network nacos_net --network-alias nacos-ngx --name nacos-ngx --hostname nacos-ngx -p 8848:80 -v /D/DockerData/nacos-ngx/html:/usr/share/nginx/html -v /D/DockerData/nacos-ngx/conf/nginx.conf:/etc/nginx/nginx.conf -v /D/DockerData/nacos-ngx/conf.d:/etc/nginx/conf.d -v /D/DockerData/nacos-ngx/logs:/var/log/nginx nginx:latest
+docker run -d --restart=always --network nacos_net --network-alias nacos-ngx --name nacos-ngx --hostname nacos-ngx -p 8848:80 -v /D/DockerData/nacos-ngx/html:/usr/share/nginx/html -v /D/DockerData/nacos-ngx/conf/nginx.conf:/etc/nginx/nginx.conf -v /D/DockerData/nacos-ngx/conf.d:/etc/nginx/conf.d -v /D/DockerData/nacos-ngx/logs:/var/log/nginx -e "TZ=Asia/Shanghai" nginx:latest
 ```
 
 * `/etc/nginx/nginx.conf` 添加 `upstream nacos_cluster {...}` 配置
@@ -611,6 +611,7 @@ docker run -d --restart=always --network nacos_net --network-alias nacos-ngx --n
   
       #gzip  on;
   	
+  	# nacos cluster 节点
       upstream nacos_cluster {
           server nacos1:8848;
           server nacos2:8848;
@@ -634,15 +635,18 @@ docker run -d --restart=always --network nacos_net --network-alias nacos-ngx --n
       #charset koi8-r;
       #access_log  /var/log/nginx/host.access.log  main;
   	
-  	location /nacos {
-          proxy_pass http://nacos_cluster/nacos;
+  	#location /nacos {
+      #   proxy_pass http://nacos_cluster/nacos;
           # 请使用 $http_host 别使用 $host
           # 否则访问 http://127.0.0.1:8848/nacos 会重定向到 http://127.0.0.1/nacos/ 打不开
-  		proxy_set_header Host $http_host;
-      }
+  	#	proxy_set_header Host $http_host;
+      #}
   
       location / {
   		proxy_pass http://nacos_cluster;
+  		# 请使用 $http_host 别使用 $host
+          # 否则访问 http://127.0.0.1:8848/nacos 会重定向到 http://127.0.0.1/nacos/ 打不开
+  		proxy_set_header Host $http_host;
           #root   /usr/share/nginx/html;
           #index  index.html index.htm;
       }
