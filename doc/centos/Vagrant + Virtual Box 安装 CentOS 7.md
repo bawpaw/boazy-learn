@@ -1,5 +1,7 @@
 # Vagrant + Virtual Box 安装 CentOS 7
 
+[TOC]
+
 ## 安装 Vagrant
 
 ### 下载

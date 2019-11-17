@@ -1,0 +1,52 @@
+boxes = [
+    {
+        :name => "k8s-kubeadm-91",
+        :eth1 => "10.198.0.91",
+        :mem => "2048",
+        :cpu => "2",
+		:ssh => "2291"
+    },
+    {
+        :name => "k8s-kubeadm-92",
+        :eth1 => "10.198.0.92",
+        :mem => "2048",
+        :cpu => "2",
+		:ssh => "2292"
+    },
+    {
+        :name => "k8s-kubeadm-93",
+        :eth1 => "10.198.0.93",
+        :mem => "2048",
+        :cpu => "2",
+		:ssh => "2293"
+    }
+]
+
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "centos/7"
+  
+   boxes.each do |opts|
+      config.vm.define opts[:name] do |config|
+        config.vm.hostname = opts[:name]
+        config.vm.provider "vmware_fusion" do |v|
+          v.vmx["memsize"] = opts[:mem]
+          v.vmx["numvcpus"] = opts[:cpu]
+        end
+
+        config.vm.provider "virtualbox" do |v|
+          v.customize ["modifyvm", :id, "--memory", opts[:mem]]
+		  v.customize ["modifyvm", :id, "--cpus", opts[:cpu]]
+		  v.customize ["modifyvm", :id, "--name", opts[:name]]
+        end
+
+        config.vm.network :public_network, ip: opts[:eth1]
+		
+		# 先禁用默认 22->2222 的 ssh 转发
+		config.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh", disabled: "true"
+		# 再创建一个 22->自定义端口 的 ssh 转发
+		config.vm.network :forwarded_port, guest: 22, host: opts[:ssh]
+      end
+  end
+
+end
