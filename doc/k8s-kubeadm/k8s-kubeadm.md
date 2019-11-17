@@ -680,6 +680,7 @@ kubectl get nodes
 * 当看到上面的 `kubectl get nodes` 结果，恭喜 K8S 搭建成功
 
 ## docker ps -a
+* 有三个容器状态好像不正常了（晚些时间有空再看看）
 
 ![](images/k8s-kubeadm-2019-11-17_039.png)
 
