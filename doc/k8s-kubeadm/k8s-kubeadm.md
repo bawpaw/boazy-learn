@@ -4,7 +4,7 @@
 
 ## CentOS 7 搭建前说明
 
-* 至于 Vagrant 的 `centos/7` 镜像如像下载及添加到 Vagrant 这里不再进行说明了，自行网络搜索
+* 至于 Vagrant 的 `centos/7` 镜像如何下载及添加到 Vagrant 这里不再进行说明了，自行网络搜索
   * 也可查看《Vagrant + Virtual Box 安装 CentOS 7.md》文档
 
 * 创建3台` CentOS 7` 虚拟机器
