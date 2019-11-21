@@ -89,6 +89,7 @@ Disconnected: No supported authentication methods available (server sent: gssapi
 ```
 
 * 在 VirtualBox 下使用 `vagrant/vagrant` 账号登陆，执行以下命令处理
+  * 3台机器都执行命令
 
 ```bash
 sudo -i
@@ -495,7 +496,7 @@ sudo docker images
 sudo docker login --username=填写你的阿里云账号 registry.cn-shenzhen.aliyuncs.com
 ```
 
-![](D:\boazy\Desktop\k8s-kubeadm\images\k8s-kubeadm-2019-11-17_024.png)
+![](images/k8s-kubeadm-2019-11-17_024.png)
 
 ##### 创建推送脚本
 
