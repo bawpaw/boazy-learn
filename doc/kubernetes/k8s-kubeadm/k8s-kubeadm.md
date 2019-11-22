@@ -5,8 +5,8 @@
 ## CentOS 7 搭建前说明
 
 * 至于 Vagrant 的 `centos/7` 镜像如何下载及添加到 Vagrant 这里不再进行说明了，自行网络搜索
-  * 也可查看《Vagrant + Virtual Box 安装 CentOS 7.md》文档
-
+  * 也可查看《[Vagrant&VirtualBox-安装-CentOS7.md](../../centos/vagrant&virtualbox-install-centos7/Vagrant&VirtualBox-安装-CentOS7.md)》文档
+  
 * 创建3台` CentOS 7` 虚拟机器
   * IP 分别定为：10.198.0.91、10.198.0.92、10.198.0.93
   * 配置为：2CPU+4G

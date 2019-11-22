@@ -1,6 +1,6 @@
-# Vagrant + Virtual Box 安装 CentOS 7
-
 [TOC]
+
+# Vagrant + Virtual Box 安装 CentOS 7
 
 ## 安装 Vagrant
 
@@ -13,7 +13,11 @@
 ### 安装
 
 * 下载后安装
-* 安装后采用命令 vagrant 测试是否安装成功
+* 安装后采用命令 `vagrant` 测试是否安装成功
+
+```bash
+vagrant
+```
 
 
 
@@ -27,6 +31,7 @@
 ### 安装
 
 * 下载后安装
+  * 跟安装 windows 应用程没区别
 
 
 
@@ -38,7 +43,7 @@
 
 ### 添加下载的 CentOS 7 的 box 到 vagrant
 
-* 添加之前用命令 vagrant box list 查看 vagrant 本地 box 时是没有的
+* 添加之前用命令 `vagrant box list` 查看 vagrant 本地 box 时是没有的
 
   ```bash
   vagrant box list
@@ -50,7 +55,7 @@
   vagrant box add centos/7 D:\downloads\virtualbox.box
   ```
 
-* 添加之后用命令 vagrant box list 查看 vagrant 本地 box 时是可以看到 centos/7 了
+* 添加之后用命令 `vagrant box list` 查看 vagrant 本地 box 时是可以看到 centos/7 了
 
   ```bash
   vagrant box list
@@ -64,7 +69,7 @@
   vagrant init centos/7
   ```
 
-* 创建成功后可修改 Vagrantfile 文件信息
+* 创建成功后可修改 `Vagrantfile` 文件信息
 
   ```bash
     # boxes at https://vagrantcloud.com/search.
@@ -94,7 +99,7 @@
 
 ### 创建 CentOS 7 虚拟机
 
-* 创建命令
+* 执行命令 `vagrant up` 创建虚拟机
 
   ```bash
   vagrant up
@@ -102,36 +107,48 @@
 
 * 打开 Virtual Box 看可以看到 CentOS 7 已创建成功
 
+  * 执行命令 `vagrant up` 时可以同时打开  Virtual Box 查创建过程中
+
 ### 配置 CentOS 7 虚拟机
 
-#### 默认 SSH 登陆用户名/密码
+#### 配置 `用户名/密码 ` SSH 登陆
+
+* 不配置的话 SSH 工具软件连接时会失败，报以下错误
 
 ```bash
+Disconnected: No supported authentication methods available (server sent: gssapi-keyex,gssapi-with-mic)
+```
+
+* 在 `Virtual Box` 界面中打开 CentOS 7 `SSH` 界面
+* 使用 `CentOS 7 用户` 登陆
+* 修改 `/etc/ssh/sshd_config` 配置（需要管理权限）
+
+```bash
+vi /etc/ssh/sshd_config
+```
+
+```
+# 修改文件内容属性值为 yes 后保存
+PasswordAuthentication yes
+```
+
+* 重启 `sshd` 服务（需要管理权限）
+
+```bash
+systemctl restart sshd
+```
+
+### CentOS 7 用户
+
+#### vagrant 用户/密码
+
+```
 vagrant/vagrant
 ```
 
 #### root 用户名/密码
 
-* root 用户登陆需要开启
+```
+root/vagrant
+```
 
-  ```bash
-  sudo -i
-  vi /etc/ssh/sshd_config
-  ```
-
-  ```bash
-  # 修改文件内容属性值为 yes
-  PasswordAuthentication yes
-  ```
-
-  ```bash
-  systemctl restart sshd
-  ```
-
-* root 用户名/密码
-
-  ```bash
-  root/vagrant
-  ```
-
-  
