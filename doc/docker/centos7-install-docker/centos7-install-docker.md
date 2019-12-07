@@ -33,18 +33,18 @@ yum install -y yum-utils \
 * 以下任选一个（选择国内的地址速度会快）
 
 ```bash
+# 阿里云（推介使用这个）
+yum-config-manager \
+	--add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 # 
 yum-config-manager \
-	--add-repo \
-	https://mydream.ink/utils/container/docker-ce.repo
+	--add-repo https://mydream.ink/utils/container/docker-ce.repo
 # 中科大
 yum-config-manager \
-	--add-repo \
-	https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo
+	--add-repo https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo
 # 官方
 yum-config-manager \
-    --add-repo \
-    https://download.docker.com/linux/centos/docker-ce.repo
+    --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 ```
 
 * 如果设置失败，可能是系统时间不对，执行以下命令同步时间并设置
