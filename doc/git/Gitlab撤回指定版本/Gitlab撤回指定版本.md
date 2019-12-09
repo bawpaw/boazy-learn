@@ -56,6 +56,8 @@ git reset --hard 03406602e4c5b85d50390c928089c57df930ba34
 
 ```bash
 git push -f
+# 或
+git push origin master -f
 ```
 
 * 这个命令 `-f` 表示强制拿本地版本覆盖远程版本，一定要注意！别把代码搞没了！
@@ -69,6 +71,7 @@ git push -f
 # 4、到 Gitlab 设置去掉 master 分支保护
 
 * settings -> Protected Branches(Expand) -> Unprotect
+* 如果是撤回非 master 分支，是不需要这步操作的，因为 Gitlab 默认只给 master 分支有保护，其他分支默认情况下无保护的
 
 ![](images/05-gitlab-set-delete-01.png)
 
@@ -82,6 +85,8 @@ git push -f
 
 ```bash
 git push -f
+# 或
+git push origin master -f
 ```
 
 * push 成功，OK 远程撤回成功。可以查看日志检验查看。
@@ -110,6 +115,7 @@ git log
 
 * master 分支保护必须设置回来
 * settings -> Protected Branches(Expand) -> Proect
+* 如果是撤回非 master 分支，是不需要这步操作的，因为 Gitlab 默认只给 master 分支有保护，其他分支默认情况下无保护的
 
 ![](images/10-gilab-set-add-01.png)
 
