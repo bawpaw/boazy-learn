@@ -152,3 +152,22 @@ vagrant/vagrant
 root/vagrant
 ```
 
+## 所遇问题
+
+### VERR_NEM_VM_CREATE_FAILED 
+
+#### 错误描述
+
+![](images/2019-12-10_error.png)
+
+#### 解决方案
+
+* Windows 命令窗口中执行命令（ 禁用 Hyper-V ）
+
+```shell
+bcdedit /set hypervisorlaunchtype off
+```
+
+* 执行完命令后重启计算机，再次尝试成功咯
+
+![](images/2019-12-10_ok.png)
