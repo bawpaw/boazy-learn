@@ -46,6 +46,11 @@ Vagrant.configure(2) do |config|
 		config.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh", disabled: "true"
 		# 再创建一个 22->自定义端口 的 ssh 转发
 		config.vm.network :forwarded_port, guest: 22, host: opts[:ssh]
+
+		# 禁用 vagrant 的默认共享目录
+		#config.vm.synced_folder ".", "/vagrant", disabled: true
+		# 指定共享目录挂载
+		#config.vm.synced_folder "D:/DockerData", "/dockerdata", create: true, owner: "root", group: "root", mount_options: ["dmode=777","fmode=777"], type: "rsync"
       end
   end
 
