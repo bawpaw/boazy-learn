@@ -210,7 +210,8 @@ drwxr-xr-x. 3 root root   20 Dec 18 14:38 common
 [root@centos7-qscft installer]#
 ```
 
-### 修改 `docker-compose.yml` 文件
+### 【可选】修改 `docker-compose.yml` 文件
+* 可选，可选则修改，也可选则不修改
 
 ```bash
 # 备份文件
