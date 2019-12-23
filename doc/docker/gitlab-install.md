@@ -1,5 +1,17 @@
 [TOC]
 
+# 安装环境
+
+## OS 版本
+
+* CentOS Linux release 7.5.1804 (Core)
+
+## Docker 版本
+
+* Docker version 19.03.5, build 633a0ea
+
+
+
 # gitlab/gitlab-ce 安装
 
 * 官方推介配置为 2核CPU4G可用内存

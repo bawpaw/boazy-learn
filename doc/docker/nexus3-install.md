@@ -1,5 +1,17 @@
 [TOC]
 
+# 安装环境
+
+## OS 版本
+
+* CentOS Linux release 7.5.1804 (Core)
+
+## Docker 版本
+
+* Docker version 19.03.5, build 633a0ea
+
+
+
 # sonatype/nexus3 安装 
 
 ## 查找镜像版本

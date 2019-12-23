@@ -1,7 +1,15 @@
 [TOC]
 
 # 安装环境
-* CentOS 6.5 系统下安装
+## OS 版本
+
+* CentOS release 6.5 (Final)
+
+## Docker 版本
+
+* Docker version 1.7.1, build 786b29d
+
+
 
 # nacos/nacos-server 集群安装
 
