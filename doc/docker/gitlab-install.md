@@ -48,4 +48,40 @@ docker run -d \
     gitlab/gitlab-ce:12.5.4-ce.0
 ```
 
+## 调整 `SSH` 方式 `git clone` 的端口
+
+* 如果宿主机 `22` 端口没有被占用，则直接采用 `-p 22:22` 端口映射时可跳这一章节的设置！
+
+  ```url
+  # 22 端口的 git clone 地址
+  git@gitlab.boazy.com:itp/mgds.git
+  ```
+
+* 因为 `22` 端口被宿主机占了，所以上面的端口映射采用的是 `-p 2280:22`，所以要调整 `gitlab` 中的配置为 `2280` 端口
+
+  ```url
+  # 非 22 端口的 git clone 地址
+  ssh://git@gitlab.boazy.com:2280/itp/mgds.git
+  ```
+
+### 修改 Gitlab 配置文件中的 SSH 端口
+
+```bash
+# /boazy/data/dockerdata/gitlab/etc/gitlab.rb 宿主机路径等于 /etc/gitlab/gitlab.rb
+# 修改 /etc/gitlab/gitlab.rb 中的：# gitlab_rails['gitlab_shell_ssh_port'] = 22
+# 修改为：gitlab_rails['gitlab_shell_ssh_port'] = 2280
+
+# 切换到配置文件目录
+cd /boazy/data/dockerdata/gitlab/etc/
+# 备份文件
+cp gitlab.rb gitlab.rb.bak0
+# 修改文件，改为：gitlab_rails['gitlab_shell_ssh_port'] = 2280
+# 采用 sed 命令替换修改
+sed -i "s/# gitlab_rails\['gitlab_shell_ssh_port'\] = 22/gitlab_rails\['gitlab_shell_ssh_port'\] = 2280/g" gitlab.rb
+# 查看修改后的结果
+cat gitlab.rb | grep 2280
+
+# 修改后重启容器
+docker restart gitlab
+```
 
