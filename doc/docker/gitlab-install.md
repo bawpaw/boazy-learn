@@ -81,7 +81,8 @@ sed -i "s/# gitlab_rails\['gitlab_shell_ssh_port'\] = 22/gitlab_rails\['gitlab_s
 # 查看修改后的结果
 cat gitlab.rb | grep 2280
 
-# 修改后重启容器
+# 修改后重启容器 或 刷新 gitlab 配置
 docker restart gitlab
+docker exec -it gitlab gitlab-ctl reconfigure
 ```
 
