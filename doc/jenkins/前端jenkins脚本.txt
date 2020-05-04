@@ -1,0 +1,136 @@
+def timeVersion() {
+	// 20191210175842
+    return new Date().format('yyyyMMddHHmmss')
+}
+
+def getRemoteServer(args) {
+    def remote = [:]
+    remote.name = 'SERVER_' + args.host
+    remote.host = args.host
+    remote.port = args.port
+    remote.allowAnyHosts = true
+    withCredentials([usernamePassword(credentialsId: args.credentialsId, passwordVariable: 'password', usernameVariable: 'username')]) {
+        remote.user = "${username}"
+        remote.password = "${password}"
+    }
+    remote.gateway = args.gateway
+
+    return remote
+}
+
+def deployFront(remoteServer) {
+    sh """
+        cd dist
+        tar czvf ${_timeVersion}_${appName}.tar.gz *
+        pwd && ls -l
+    """
+    sshCommand remote: remoteServer, command: "mkdir -p /boazy/data/dockerdata/${deployNginxName}/html/${appName}"
+    sshPut remote: remoteServer, from: "dist/${_timeVersion}_${appName}.tar.gz", into: "/boazy/data/dockerdata/${deployNginxName}/html/${appName}"
+    sshCommand remote: remoteServer, command: """
+        cd /boazy/data/dockerdata/${deployNginxName}/html/${appName}
+        tar -zxvf ${_timeVersion}_${appName}.tar.gz -C ./
+    """
+    sshCommand remote: remoteServer, command: """
+        cd /boazy/data/dockerdata/${deployNginxName}/html/${appName}
+        mkdir -p bak && mv ${_timeVersion}_${appName}.tar.gz bak/${_timeVersion}_${appName}.tar.gz
+        pwd && ls -l
+        ls -l bak
+    """
+    sh """
+        cd dist
+        rm -rf *_${appName}.tar.gz
+        pwd && ls -l
+    """
+    sshCommand remote: remoteServer, command: """
+        cd /boazy/data/dockerdata/${deployNginxName}/conf.d
+        mkdir -p bak && mv ${appName}.conf bak/${_timeVersion}_${appName}.conf
+        pwd && ls -l
+        ls -l bak
+    """, failOnError: false
+    script {
+        def configFileContent = """server {
+    listen       ${deployPort};
+    server_name  localhost;
+    location / {
+        root   /usr/share/nginx/html/${appName};
+        index  index.html index.htm;
+    }
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}"""
+        writeFile file: "${appName}.conf", text: configFileContent, encoding: "UTF-8"
+    }
+    sshPut remote: remoteServer, from: "${appName}.conf", into: "/boazy/data/dockerdata/${deployNginxName}/conf.d"
+    sh "rm -rf ${appName}.conf"
+    sshCommand remote: remoteServer, command: "docker exec ${deployNginxName} nginx -s reload"
+}
+
+pipeline {
+    agent any
+
+    environment {
+        _timeVersion = timeVersion()
+    }
+
+    stages {
+        stage('Checkout') {
+            steps{
+                echo 'Checkout code'
+                checkout([$class: 'GitSCM', branches: [[name: "${gitBranch}"]]
+                        , doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: []
+                        , userRemoteConfigs: [[credentialsId: 'f46d9565-fbf2-4f08-9e00-0a6953af58dc', url: "${gitUrl}"]]
+                ])
+            }
+        }
+        stage('Config env') {
+            steps {
+                echo "Config ${active} env"
+                sh """
+                    cat config/${active}.env.js
+                    sed -i 's/http:\\/\\/192.168.0.95:9090/http:\\/\\/${kmgatewayHost}/g' config/${active}.env.js
+                    sed -i 's/http:\\/\\/192.168.0.95:8188/http:\\/\\/${ssoHost}/g' config/${active}.env.js
+                    cat config/${active}.env.js
+                """
+            }
+        }
+        stage('Build') {
+            steps {
+                echo "Build code"
+                script {
+                    def placeHost = getRemoteServer([host: "192.168.0.95", credentialsId: "d72cbb47-ecde-4096-b500-de8837a563f8"])
+                    def workspace = pwd()
+                    workspace = workspace.substring(5)
+                    sshCommand remote: placeHost, command: "cd /boazy/data/dockerdata/${workspace}"
+                    sshCommand remote: placeHost, command: """
+                        cd /boazy/data/dockerdata/${workspace}
+                        npm update -g cnpm --registry=https://registry.npm.taobao.org
+                        cnpm install
+                        npm run ${active}
+                    """
+                }
+            }
+        }
+        stage('Deploy 21') {
+            steps {
+                echo 'Deploy Front 21'
+                script {
+                    def gatewayHost = getRemoteServer([host: "40.73.115.56", port: 2277, credentialsId: "b2176fef-fd00-4ffa-8f2a-cd0da7ac19da"])
+                    def remoteServer = getRemoteServer([host: "10.6.2.21", credentialsId: "b2176fef-fd03-4f00-8f2a-cd0da7ac19da", gateway: gatewayHost])
+                    deployFront(remoteServer)
+                }
+            }
+        }
+        stage('Deploy 22') {
+            steps {
+                echo 'Deploy Front 22'
+                script {
+                    def gatewayHost = getRemoteServer([host: "40.73.115.56", port: 2277, credentialsId: "b2176fef-fd00-4ffa-8f2a-cd0da7ac19da"])
+                    def remoteServer = getRemoteServer([host: "10.6.2.22", credentialsId: "b2176fef-fd03-4f00-8f2a-cd0da7ac19da", gateway: gatewayHost])
+                    deployFront(remoteServer)
+                }
+            }
+        }
+    }
+}

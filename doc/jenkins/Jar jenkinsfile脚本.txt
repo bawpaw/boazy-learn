@@ -1,0 +1,99 @@
+def timeVersion() {
+	// 20191210175842
+    return new Date().format('yyyyMMddHHmmss')
+}
+
+def getRemoteServer(args) {
+    def remote = [:]
+    remote.name = 'SERVER_' + args.host
+    remote.host = args.host
+    remote.port = args.port
+    remote.allowAnyHosts = true
+    withCredentials([usernamePassword(credentialsId: args.credentialsId, passwordVariable: 'password', usernameVariable: 'username')]) {
+        remote.user = "${username}"
+        remote.password = "${password}"
+    }
+    remote.gateway = args.gateway
+
+    return remote
+}
+
+def deployJar(remoteServer, vmId) {
+    sshCommand remote: remoteServer, command: """
+        mkdir -p ${_baseDir}/bak
+        cd ${_baseDir}
+        cp -r ${appName}.jar bak/${_timeVersion}_${appName}.jar
+        ls -l bak | grep ${_timeVersion}
+        ls -l ${_baseDir}
+    """, failOnError: false
+    sshCommand remote: remoteServer, command: """
+        ps -ef | grep ${appName} | grep java
+    """
+    sshPut remote: remoteServer, from: "target/${appName}-${appVersion}.jar", into: "${_baseDir}/${appName}.jar"
+    sshCommand remote: remoteServer, command: """
+        ps -ef | grep ${appName} | grep java | awk \'{print \$2}\' | xargs kill -9
+    """, failOnError: false
+    sshCommand remote: remoteServer, command: """
+        cd ${_baseDir}
+        nohup ${_java} -jar ${javaArgs} -Dspring.id-generator.vesta.machine-id=${vmId} ${_javaHeapDump} ${appName}.jar > /dev/null 2>nohup.out &
+    """
+    sshCommand remote: remoteServer, command: """
+        ps -ef | grep ${appName} | grep java
+    """
+}
+
+pipeline {
+    agent any
+
+    environment {
+        JAVA_HOME="/boazy/local/jdk/jdk1.8.0_202"
+        CLASSPATH=".:${JAVA_HOME}/jre/lib:${JAVA_HOME}/lib"
+        MAVEN_HOME="/boazy/local/maven"
+        PATH="$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH"
+
+        _timeVersion=timeVersion()
+        _baseDir="/boazy/app/${appName}"
+        _java="${JAVA_HOME}/bin/java"
+        _javaHeapDump="-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${_baseDir}"
+    }
+
+    stages {
+        stage('Pull') {
+            steps{
+                echo 'Pull code'
+                checkout([$class: 'GitSCM', branches: [[name: "${gitBranch}"]]
+                        , doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: []
+                        , userRemoteConfigs: [[credentialsId: 'f46d9565-fbf2-4f08-9e00-0a6953af58dc', url: "${gitUrl}"]]
+                ])
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Build code'
+                sh 'mvn clean package -U -Dmaven.test.skip=true'
+            }
+        }
+        stage('Deploy 21') {
+            steps {
+                echo 'Deploy 21'
+                script {
+                    def gatewayHost = getRemoteServer([host: "40.73.115.56", port: 2277, credentialsId: "b2176fef-fd00-4ffa-8f2a-cd0da7ac19da"])
+                    def remoteServer = getRemoteServer([host: "10.6.2.21", credentialsId: "b2176fef-fd03-4f00-8f2a-cd0da7ac19da", gateway: gatewayHost])
+                    int vmId = params.vestaMachineId.toInteger() + 1
+                    deploy(remoteServer, vmId)
+                }
+            }
+        }
+        stage('Deploy 22') {
+            steps {
+                echo 'Deploy 22'
+                script {
+                    def gatewayHost = getRemoteServer([host: "40.73.115.56", port: 2277, credentialsId: "b2176fef-fd00-4ffa-8f2a-cd0da7ac19da"])
+                    def remoteServer = getRemoteServer([host: "10.6.2.22", credentialsId: "b2176fef-fd03-4f00-8f2a-cd0da7ac19da", gateway: gatewayHost])
+                    int vmId = params.vestaMachineId.toInteger() + 2
+                    deployJar(remoteServer, vmId)
+                }
+            }
+        }
+    }
+}
